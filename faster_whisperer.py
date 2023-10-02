@@ -32,9 +32,9 @@ def transcribe(input_path_ext):
     # )
 
     with open(
-        f"{input_path}_no_timestamp.txt", "w"
+        f"{input_path}_no_timestamp.txt", "w", encoding='utf-8'
     ) as fnt:
-        with open(f"{input_path}.txt", "w") as f:
+        with open(f"{input_path}.txt", "w", encoding='utf-8') as f:
             for segment in segments:
                 fnt.write(f"{segment.text}")
 
@@ -47,7 +47,7 @@ def transcribe(input_path_ext):
                 f.write(line + "\n")
     # Strip no_timestamp TXT
     with open(
-        f"{input_path}_no_timestamp.txt", "r+"
+        f"{input_path}_no_timestamp.txt", "r+", encoding='utf-8'
     ) as fnt:
         file_contents = fnt.read()
         stripped_text = file_contents.strip()
