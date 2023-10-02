@@ -6,7 +6,7 @@ import os
 
 start_time = time.time()
 
-input_path_ext = [""] # Path to audio file
+input_path_ext = [""] # Paths to audio file
 
 language = "en"
 model_size = "large-v2"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large'
