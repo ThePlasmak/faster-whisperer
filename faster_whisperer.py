@@ -81,23 +81,23 @@ def transcribe(input_path_ext):
 
             seq_number += 1
 
-    # Calculate the time taken in seconds
-    time_taken_seconds = time.time() - start_time
-
-    # Format the time taken to three decimal places
-    time_taken_formatted = "{:.3f}".format(time_taken_seconds)
-
-    # Calculate hours, minutes, and seconds
-    hours = int(time_taken_seconds // 3600)
-    minutes = int((time_taken_seconds % 3600) // 60)
-    seconds = int(time_taken_seconds % 60)
-
-    # Print the time taken in hours, minutes, and seconds format with three decimal places
-    print(
-        "Time taken: {} hours, {} minutes, {} seconds".format(
-            hours, minutes, time_taken_formatted
-        )
-    )
-
 for ipe in input_path_ext:
     transcribe(ipe)
+
+# Calculate the time taken in seconds
+time_taken_seconds = time.time() - start_time
+
+# Format the time taken to three decimal places
+time_taken_formatted = "{:.3f}".format(time_taken_seconds)
+
+# Calculate hours, minutes, and seconds
+hours = int(time_taken_seconds // 3600)
+minutes = int((time_taken_seconds % 3600) // 60)
+seconds = int(time_taken_seconds % 60)
+
+# Print the time taken in hours, minutes, and seconds format with three decimal places
+print(
+    "Time taken: {} hours, {} minutes, {} seconds".format(
+        hours, minutes, time_taken_formatted
+    )
+)
