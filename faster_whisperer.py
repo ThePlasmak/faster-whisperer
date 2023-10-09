@@ -47,7 +47,6 @@ def transcribe(input_path_ext):
                     segment_end = time.strftime("%H:%M:%S", time.gmtime(segment.end))
 
                     line = f"[{segment_start} -> {segment_end}] {segment.text}"
-                    print(line)
 
                     f.write(line + "\n")
 
