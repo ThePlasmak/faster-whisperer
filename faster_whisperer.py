@@ -34,17 +34,45 @@ def transcribe(input_path_ext):
     with open(
         f"{input_path}_no_timestamp.txt", "w", encoding='utf-8'
     ) as fnt:
-        with open(f"{input_path}.txt", "w", encoding='utf-8') as f:
-            for segment in segments:
-                fnt.write(f"{segment.text}")
+        with open(
+            f"{input_path}.srt", "w", encoding="utf-8"
+        ) as fsrt:
+            with open(f"{input_path}.txt", "w", encoding='utf-8') as f:
+                for segment in segments:
+                    # Write TXT (no timestamp)
+                    fnt.write(f"{segment.text}")
 
-                segment_start = time.strftime("%H:%M:%S", time.gmtime(segment.start))
-                segment_end = time.strftime("%H:%M:%S", time.gmtime(segment.end))
+                    # Write TXT
+                    segment_start = time.strftime("%H:%M:%S", time.gmtime(segment.start))
+                    segment_end = time.strftime("%H:%M:%S", time.gmtime(segment.end))
 
-                line = f"[{segment_start} -> {segment_end}] {segment.text}"
-                print(line)
+                    line = f"[{segment_start} -> {segment_end}] {segment.text}"
+                    print(line)
 
-                f.write(line + "\n")
+                    f.write(line + "\n")
+
+                    # Write SRT
+                    seq_number = 1
+                    segment_start = "{:02d}:{:02d}:{:02d},{:03d}".format(
+                        int(segment.start // 3600),
+                        int((segment.start % 3600) // 60),
+                        int(segment.start % 60),
+                        int((segment.start * 1000) % 1000),
+                    )
+                    segment_end = "{:02d}:{:02d}:{:02d},{:03d}".format(
+                        int(segment.end // 3600),
+                        int((segment.end % 3600) // 60),
+                        int(segment.end % 60),
+                        int((segment.end * 1000) % 1000),
+                    )
+
+                    fsrt.write(f"{seq_number}\n")
+                    fsrt.write(f"{segment_start} --> {segment_end}\n")
+                    fsrt.write(f"{segment.text.strip()}\n\n")
+
+                    print(f"{segment_start} --> {segment_end}\n{segment.text.strip()}\n")
+
+                    seq_number += 1
     # Strip no_timestamp TXT
     with open(
         f"{input_path}_no_timestamp.txt", "r+", encoding='utf-8'
@@ -54,32 +82,6 @@ def transcribe(input_path_ext):
         fnt.seek(0)
         fnt.write(stripped_text)
         fnt.truncate()
-
-    with open(
-        f"{input_path}.srt", "w", encoding="utf-8"
-    ) as f:
-        seq_number = 1
-        for segment in segments:
-            segment_start = "{:02d}:{:02d}:{:02d},{:03d}".format(
-                int(segment.start // 3600),
-                int((segment.start % 3600) // 60),
-                int(segment.start % 60),
-                int((segment.start * 1000) % 1000),
-            )
-            segment_end = "{:02d}:{:02d}:{:02d},{:03d}".format(
-                int(segment.end // 3600),
-                int((segment.end % 3600) // 60),
-                int(segment.end % 60),
-                int((segment.end * 1000) % 1000),
-            )
-
-            f.write(f"{seq_number}\n")
-            f.write(f"{segment_start} --> {segment_end}\n")
-            f.write(f"{segment.text.strip()}\n\n")
-
-            print(f"{segment_start} --> {segment_end}\n{segment.text.strip()}\n")
-
-            seq_number += 1
 
 for ipe in input_path_ext:
     transcribe(ipe)
