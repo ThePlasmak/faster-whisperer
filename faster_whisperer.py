@@ -6,7 +6,7 @@ import os
 
 start_time = time.time()
 
-input_path_ext = [""] # Paths to audio file
+input_path_ext = [""] # Paths to folder with audio files or audio file
 
 language = "en"
 model_size = "large-v2"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large'
@@ -82,7 +82,17 @@ def transcribe(input_path_ext):
         fnt.write(stripped_text)
         fnt.truncate()
 
-for ipe in input_path_ext:
+audio_extensions = ['.mp3', '.wav', '.ogg', '.flac', '.m4a', '.aac', '.wma']
+
+if os.path.isdir(input_path_ext[0]):
+    # List all files in the directory
+    all_files = os.listdir(input_path_ext[0])
+    # Filter out files with audio extensions
+    audio_files = [os.path.join(input_path_ext[0], file) for file in all_files if os.path.splitext(file)[1].lower() in audio_extensions]
+else:
+    audio_files = input_path_ext
+
+for ipe in audio_files:
     transcribe(ipe)
 
 # Calculate the time taken in seconds
