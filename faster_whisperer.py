@@ -6,7 +6,9 @@ import os
 
 start_time = time.time()
 
-input_path_ext = [""] # Paths to folder with audio files or audio file
+input_path_ext = [
+    "C:/Users/Sarah/Downloads/2023-12-13 18-36-42.mp4"
+]  # like "C:/Users/Sarah/Downloads/2023-12-13 18-36-42.mp4"
 
 language = "en"
 model_size = "large-v2"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large'
@@ -17,6 +19,7 @@ model = WhisperModel(model_size, device="cuda", compute_type="float16")
 # model = WhisperModel(model_size, device="cuda", compute_type="int8_float16")
 # or run on CPU with INT8
 # model = WhisperModel(model_size, device="cpu", compute_type="int8")
+
 
 def transcribe(input_path_ext):
     input_path, ext = os.path.splitext(input_path_ext)
@@ -31,19 +34,17 @@ def transcribe(input_path_ext):
     #     % (info.language, info.language_probability)
     # )
 
-    with open(
-        f"{input_path}_no_timestamp.txt", "w", encoding='utf-8'
-    ) as fnt:
-        with open(
-            f"{input_path}.srt", "w", encoding="utf-8"
-        ) as fsrt:
-            with open(f"{input_path}.txt", "w", encoding='utf-8') as f:
+    with open(f"{input_path}_no_timestamp.txt", "w", encoding="utf-8") as fnt:
+        with open(f"{input_path}.srt", "w", encoding="utf-8") as fsrt:
+            with open(f"{input_path}.txt", "w", encoding="utf-8") as f:
                 for segment in segments:
                     # Write TXT (no timestamp)
                     fnt.write(f"{segment.text}")
 
                     # Write TXT
-                    segment_start = time.strftime("%H:%M:%S", time.gmtime(segment.start))
+                    segment_start = time.strftime(
+                        "%H:%M:%S", time.gmtime(segment.start)
+                    )
                     segment_end = time.strftime("%H:%M:%S", time.gmtime(segment.end))
 
                     line = f"[{segment_start} -> {segment_end}] {segment.text}"
@@ -69,26 +70,31 @@ def transcribe(input_path_ext):
                     fsrt.write(f"{segment_start} --> {segment_end}\n")
                     fsrt.write(f"{segment.text.strip()}\n\n")
 
-                    print(f"{segment_start} --> {segment_end}\n{segment.text.strip()}\n")
+                    print(
+                        f"{segment_start} --> {segment_end}\n{segment.text.strip()}\n"
+                    )
 
                     seq_number += 1
     # Strip no_timestamp TXT
-    with open(
-        f"{input_path}_no_timestamp.txt", "r+", encoding='utf-8'
-    ) as fnt:
+    with open(f"{input_path}_no_timestamp.txt", "r+", encoding="utf-8") as fnt:
         file_contents = fnt.read()
         stripped_text = file_contents.strip()
         fnt.seek(0)
         fnt.write(stripped_text)
         fnt.truncate()
 
-audio_extensions = ['.mp3', '.wav', '.ogg', '.flac', '.m4a', '.aac', '.wma']
+
+audio_extensions = [".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac", ".wma"]
 
 if os.path.isdir(input_path_ext[0]):
     # List all files in the directory
     all_files = os.listdir(input_path_ext[0])
     # Filter out files with audio extensions
-    audio_files = [os.path.join(input_path_ext[0], file) for file in all_files if os.path.splitext(file)[1].lower() in audio_extensions]
+    audio_files = [
+        os.path.join(input_path_ext[0], file)
+        for file in all_files
+        if os.path.splitext(file)[1].lower() in audio_extensions
+    ]
 else:
     audio_files = input_path_ext
 
