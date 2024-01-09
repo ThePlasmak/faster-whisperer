@@ -7,11 +7,27 @@ import os
 start_time = time.time()
 
 input_path_ext = [
-    "C:/Users/Sarah/Downloads/2023-12-13 18-36-42.mp4"
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-28_Gracie_Whispering_Hope/WKW_0545.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-28_Gracie_Whispering_Hope/WKW_0541.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-28_Gracie_Whispering_Hope/WKW_0543.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-28_Gracie_Whispering_Hope/WKW_0544.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-30_Green_Mortician/WKW_0087.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-11-30_Green_Mortician/WKW_0088.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-03_Belinda/WKW_0190.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-04_Aishwarya/WKW_0250.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-04_Aishwarya/WKW_0251.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-14_Nicole/WKW_0756.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-14_Nicole/WKW_0753.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-14_Nicole/WKW_0754.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-14_Nicole/WKW_0755.MP4",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-21_Fiona/WKW_0336.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-21_Fiona/WKW_0333.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-21_Fiona/WKW_0334.MOV",
+    "C:/Users/Sarah/OneDrive - Nanyang Technological University/School/Final-Year Project Beyond the Rainbow Bridge/04_ASSETS/06_FOOTAGE/01_RAW/2023-12-21_Fiona/WKW_0335.MOV",
 ]  # like "C:/Users/Sarah/Downloads/2023-12-13 18-36-42.mp4"
 
 language = "en"
-model_size = "large-v2"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large'
+model_size = "large-v3"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large'
 
 # Run on GPU with FP16
 model = WhisperModel(model_size, device="cuda", compute_type="float16")
