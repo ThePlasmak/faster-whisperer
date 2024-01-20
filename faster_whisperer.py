@@ -101,20 +101,12 @@ else:
 for ipe in audio_files:
     transcribe(ipe)
 
-# Calculate the time taken in seconds
 time_taken_seconds = time.time() - start_time
 
-# Format the time taken to three decimal places
-time_taken_formatted = "{:.3f}".format(time_taken_seconds)
-
-# Calculate hours, minutes, and seconds
 hours = int(time_taken_seconds // 3600)
 minutes = int((time_taken_seconds % 3600) // 60)
-seconds = int(time_taken_seconds % 60)
+seconds = time_taken_seconds % 60
 
-# Print the time taken in hours, minutes, and seconds format with three decimal places
 print(
-    "Time taken: {} hours, {} minutes, {} seconds".format(
-        hours, minutes, time_taken_formatted
-    )
+    "Time taken: {} hours, {} minutes, {:.3f} seconds".format(hours, minutes, seconds)
 )
