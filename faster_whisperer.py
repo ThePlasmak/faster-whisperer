@@ -4,7 +4,7 @@ import os
 
 # For the SRT, use Subtitle Edit to fix common issues automatically (Ctrl+Shift+F)
 
-start_time = time.time()
+start_time = time.perf_counter()
 
 input_path_ext = [
     "C:/Users/Sarah/Downloads/video.mp4"
@@ -101,7 +101,7 @@ else:
 for ipe in audio_files:
     transcribe(ipe)
 
-time_taken_seconds = time.time() - start_time
+time_taken_seconds = time.perf_counter() - start_time
 
 hours = int(time_taken_seconds // 3600)
 minutes = int((time_taken_seconds % 3600) // 60)
