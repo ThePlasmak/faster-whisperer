@@ -4,11 +4,11 @@ import os
 
 # For the SRT, use Subtitle Edit to fix common issues automatically (Ctrl+Shift+F)
 
-start_time = time.perf_counter()
-
 input_path_ext = [
     "C:/Users/Sarah/Downloads/video.mp4"
 ]  # like "C:/Users/Sarah/Downloads/video.mp4"
+
+start_time = time.perf_counter()
 
 language = "en"
 model_size = "large-v3"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large'
