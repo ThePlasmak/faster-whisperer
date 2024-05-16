@@ -1,17 +1,16 @@
-from faster_whisper import WhisperModel  # requires Python 3.11 for now
+from faster_whisper import WhisperModel
 import time
 import os
 
-# For the SRT, use Subtitle Edit to fix common issues automatically (Ctrl+Shift+F)
-
-input_path_ext = [
-    "C:/Users/Sarah/Downloads/video.mp4"
-]  # like "C:/Users/Sarah/Downloads/video.mp4"
-
 start_time = time.perf_counter()
 
+# For the SRT, use Subtitle Edit to fix common issues automatically (Ctrl+Shift+F)
+
+with open(".txt", "r", encoding="utf-8") as f:
+    input_path_ext = f.read().strip()  # Ensure the file path is read correctly
+
 language = "en"
-model_size = "large-v3"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large'
+model_size = "distil-large-v3"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large'
 
 # Run on GPU with FP16
 model = WhisperModel(model_size, device="cuda", compute_type="float16")
@@ -37,6 +36,7 @@ def transcribe(input_path_ext):
     with open(f"{input_path}_no_timestamp.txt", "w", encoding="utf-8") as fnt:
         with open(f"{input_path}.srt", "w", encoding="utf-8") as fsrt:
             with open(f"{input_path}.txt", "w", encoding="utf-8") as f:
+                seq_number = 1  # Initialize seq_number here
                 for segment in segments:
                     # Write TXT (no timestamp)
                     fnt.write(f"{segment.text}")
@@ -52,7 +52,6 @@ def transcribe(input_path_ext):
                     f.write(line + "\n")
 
                     # Write SRT
-                    seq_number = 1
                     segment_start = "{:02d}:{:02d}:{:02d},{:03d}".format(
                         int(segment.start // 3600),
                         int((segment.start % 3600) // 60),
@@ -86,17 +85,17 @@ def transcribe(input_path_ext):
 
 audio_extensions = [".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac", ".wma"]
 
-if os.path.isdir(input_path_ext[0]):
+if os.path.isdir(input_path_ext):
     # List all files in the directory
-    all_files = os.listdir(input_path_ext[0])
+    all_files = os.listdir(input_path_ext)
     # Filter out files with audio extensions
     audio_files = [
-        os.path.join(input_path_ext[0], file)
+        os.path.join(input_path_ext, file)
         for file in all_files
         if os.path.splitext(file)[1].lower() in audio_extensions
     ]
 else:
-    audio_files = input_path_ext
+    audio_files = [input_path_ext]  # Treat the single file path correctly
 
 for ipe in audio_files:
     transcribe(ipe)
