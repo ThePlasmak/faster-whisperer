@@ -6,6 +6,7 @@ start_time = time.perf_counter()
 
 # For the SRT, use Subtitle Edit to fix common issues automatically (Ctrl+Shift+F)
 
+# Add desired files to process in ".txt"
 with open(".txt", "r", encoding="utf-8") as f:
     input_path_ext = f.read().strip()  # Ensure the file path is read correctly
 
