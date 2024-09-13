@@ -1,4 +1,4 @@
-from faster_whisper import WhisperModel
+from faster_whisper import WhisperModel, BatchedInferencePipeline
 import time
 import os
 
@@ -20,13 +20,19 @@ model = WhisperModel(model_size, device="cuda", compute_type="float16")
 # or run on CPU with INT8
 # model = WhisperModel(model_size, device="cpu", compute_type="int8")
 
+# Batched (is faster than default)
+batched_model = BatchedInferencePipeline(model=model)
 
 def transcribe(input_path_ext):
     input_path, ext = os.path.splitext(input_path_ext)
 
-    segments, info = model.transcribe(
-        f"{input_path_ext}", beam_size=5, language=language
-    )
+    # Default
+    # segments, info = model.transcribe(
+    #     f"{input_path_ext}", beam_size=5, language=language
+    # )
+    
+    # Batched
+    segments, info = batched_model.transcribe(f"{input_path_ext}", batch_size=16)
 
     # Print language detection result
     # print(
