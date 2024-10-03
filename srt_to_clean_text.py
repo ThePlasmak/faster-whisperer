@@ -1,3 +1,5 @@
+# Converts subtitle text (SRT format) into clean, readable text
+
 import pyperclip
 
 # Input text
