@@ -1,6 +1,8 @@
 from faster_whisper import WhisperModel, BatchedInferencePipeline
 import time
+from pydub import AudioSegment
 import os
+import tempfile
 
 start_time = time.perf_counter()
 
@@ -11,7 +13,7 @@ with open(".txt", "r", encoding="utf-8") as f:
     input_path_ext = f.read().strip()  # Ensure the file path is read correctly
 
 language = "en"
-model_size = "distil-large-v3"  # Select from this list: 'tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large'
+model_size = "distil-large-v3" # "distil-large-v3" is more accurate and faster than "large-v3", but the SRTs are too long for some reason
 
 # Run on GPU with FP16
 model = WhisperModel(model_size, device="cuda", compute_type="float16")
@@ -32,7 +34,7 @@ def transcribe(input_path_ext):
     # )
     
     # Batched
-    segments, info = batched_model.transcribe(f"{input_path_ext}", batch_size=16)
+    segments, info = batched_model.transcribe(f"{input_path_ext}", batch_size=16) # Lower batch size if you run out of memory
 
     # Print language detection result
     # print(
@@ -89,23 +91,47 @@ def transcribe(input_path_ext):
         fnt.write(stripped_text)
         fnt.truncate()
 
+def extract_audio(video_path):
+    audio = AudioSegment.from_file(video_path)
+    # Create a temporary file to store the extracted audio
+    temp_audio_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+    audio.export(temp_audio_file.name, format="wav")
+    return temp_audio_file.name
 
 audio_extensions = [".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac", ".wma"]
+video_extensions = [".mp4", ".avi", ".mov", ".mkv", ".webm"]
+
+def process_file(file_path):
+    _, ext = os.path.splitext(file_path)
+    ext = ext.lower()
+    if ext in audio_extensions:
+        # Directly transcribe audio files
+        transcribe(file_path)
+    elif ext in video_extensions:
+        # Extract audio from video files and then transcribe
+        print(f"Extracting audio from {file_path}")
+        temp_audio_file = extract_audio(file_path)
+        try:
+            transcribe(temp_audio_file)
+        finally:
+            # Clean up the temporary audio file
+            os.remove(temp_audio_file)
+    else:
+        print(f"Unsupported file format: {file_path}")
 
 if os.path.isdir(input_path_ext):
-    # List all files in the directory
+    # List all audio and video files in the directory
     all_files = os.listdir(input_path_ext)
-    # Filter out files with audio extensions
-    audio_files = [
+    media_files = [
         os.path.join(input_path_ext, file)
         for file in all_files
-        if os.path.splitext(file)[1].lower() in audio_extensions
+        if os.path.splitext(file)[1].lower() in audio_extensions + video_extensions
     ]
 else:
-    audio_files = [input_path_ext]  # Treat the single file path correctly
+    media_files = [input_path_ext]
 
-for ipe in audio_files:
-    transcribe(ipe)
+for file_path in media_files:
+    process_file(file_path)
 
 time_taken_seconds = time.perf_counter() - start_time
 
